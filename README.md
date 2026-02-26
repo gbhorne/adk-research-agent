@@ -1,230 +1,166 @@
-# ML Platform Architecture: End-to-End Implementation on GCP
+# ADK Research Agent
 
-> Production-ready machine learning platform for retail sales forecasting using BigQuery ML — achieving 95% confidence intervals at $1.58/month.
-
-![GCP](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
-![BigQuery](https://img.shields.io/badge/BigQuery_ML-669DF6?style=for-the-badge&logo=google-cloud&logoColor=white)
-![SQL](https://img.shields.io/badge/SQL-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Production-brightgreen?style=for-the-badge)
-![Cost](https://img.shields.io/badge/Cost-$1.58%2Fmonth-success?style=for-the-badge)
-
----
-
-## Overview
-
-This project demonstrates a complete, production-grade ML forecasting platform built entirely on Google Cloud Platform. It processes 3 years of retail sales data across 3 product categories, trains ARIMA Plus time series models in BigQuery ML, and generates 90-day forecasts with 95% confidence intervals — all for under $2/month.
-
-### Key Results
-
-| Metric | Value |
-|---|---|
-| Models Trained | 3 ARIMA Plus (one per category) |
-| Predictions Generated | 270 (90-day horizon × 3 categories) |
-| Confidence Level | 95% |
-| Operational Cost | $1.58/month ($18.96/year) |
-| Cost Per Prediction | $0.0059 |
-| ROI | 12,500x |
-| Training Time | ~12 min/model |
-| Data Quality | 99.7% |
-
----
+A multi-agent AI research system that queries internal data and searches the web simultaneously, then synthesizes everything into one executive brief. Built with Google Agent Development Kit (ADK), Gemini 2.5 Flash, BigQuery, and Google Search grounding.
 
 ## Architecture
 
+![Architecture Diagram](docs/architecture_diagram.svg)
+
 ```
-CSV Files → Cloud Storage → BigQuery → Feature Engineering →
-BigQuery ML (ARIMA Plus) → Predictions → Looker Studio Dashboard
+research_pipeline (SequentialAgent — Root)
+  ├── Step 1: research_team (ParallelAgent — Concurrent Execution)
+  │     ├── internal_data_analyst (LlmAgent + 3 BigQuery tools)
+  │     ├── market_research_analyst (LlmAgent + Google Search grounding)
+  │     └── trend_analyst (LlmAgent + 3 BigQuery tools)
+  └── Step 2: synthesizer (LlmAgent — Merges all results into unified brief)
 ```
 
-### Technology Stack
+The SequentialAgent guarantees ordering: all parallel data is gathered first (Step 1), then the synthesizer runs (Step 2) to produce one unified research brief. The ParallelAgent runs all 3 analysts concurrently, reducing wall-clock time.
 
-| Component | Technology | Purpose | Monthly Cost |
-|---|---|---|---|
-| Data Lake | Cloud Storage | Raw CSV file storage | $0.02 |
-| Data Warehouse | BigQuery | Processing, features, predictions | $0.16 |
-| ML Engine | BigQuery ML | ARIMA Plus model training & inference | $0.48 |
-| Visualization | Looker Studio | Interactive dashboards | Free |
-| Orchestration | Cloud Scheduler + Pub/Sub | Weekly prediction refresh | Free |
-| Monitoring | Cloud Monitoring | Alerts, performance tracking | Free |
+## Key Features
 
----
+- **ParallelAgent** runs 3 specialist agents concurrently (not sequential routing)
+- **Google Search grounding** retrieves real-time market data, forecasts, and competitive intelligence
+- **SequentialAgent synthesis** merges internal metrics + external context + historical trends into one executive brief
+- **output_key state passing** stores each agent's results for structured synthesis
+- **6 BigQuery tools** with parameterized SQL for security
+- **456K rows** of synthetic retail data with realistic patterns
+
+## Screenshots
+
+| Screenshot | Description |
+|-----------|-------------|
+| ![Trace](docs/screenshots/01_sequential_parallel_trace.png) | SequentialAgent + ParallelAgent trace — all 3 agents executing concurrently |
+| ![Tools](docs/screenshots/02_parallel_tool_execution.png) | Parallel tool execution — BigQuery tools firing simultaneously |
+| ![Trend](docs/screenshots/03_trend_tools_completed.png) | Trend analyst tools completed |
+| ![Internal](docs/screenshots/04_internal_data_results.png) | Internal data analyst results — revenue, regions, top products |
+| ![Trends](docs/screenshots/05_trend_analysis_results.png) | Trend analysis — monthly patterns, YoY growth, category share |
+| ![Market](docs/screenshots/06_market_research_output.png) | Market research — industry forecasts from Google Search grounding |
+| ![Competitive](docs/screenshots/07_market_research_competitive.png) | Competitive landscape and macroeconomic factors |
+| ![Citations](docs/screenshots/08_google_search_citations.png) | Google Search grounding citation chips |
+
+## Dataset
+
+| Metric | Value |
+|--------|-------|
+| Total rows | 456,750 |
+| Date range | 2020-01-01 to 2024-12-31 (5 years) |
+| Regions | Northeast, Southeast, Midwest, West, Southwest |
+| Categories | Electronics, Clothing, Home and Garden, Sports, Grocery |
+| Products | 50 (10 per category) |
+
+**Built-in patterns:** Holiday seasonality (Q4 Electronics/Grocery), summer peaks (Sports/Home & Garden), category growth trends (Electronics 8%, Home & Garden 12%), regional variation (West leads Electronics at 1.4x), deterministic product weights.
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Agent Framework | Google ADK 1.25.1 |
+| LLM | Gemini 2.5 Flash |
+| Data Warehouse | BigQuery |
+| External Search | Google Search grounding |
+| Language | Python 3.12 |
+| Auth | gcloud application-default credentials |
+
+## Tools
+
+| Tool | Agent | Description |
+|------|-------|-------------|
+| `get_category_performance()` | internal_data_analyst | Revenue, units, AOV for a category |
+| `get_regional_performance()` | internal_data_analyst | Regional breakdown with revenue/units |
+| `get_top_products()` | internal_data_analyst | Top products by revenue |
+| `get_monthly_trend()` | trend_analyst | Month-over-month revenue trend |
+| `get_yoy_comparison()` | trend_analyst | Year-over-year growth with LAG() |
+| `get_category_share()` | trend_analyst | Revenue share across all categories |
+| `google_search` | market_research_analyst | Gemini built-in web search with citations |
+
+## Example Queries
+
+| Query | Agents Activated | Tools Used |
+|-------|-----------------|------------|
+| "How are electronics performing?" | All 3 + synthesizer | All 6 BQ tools + Google Search |
+| "Compare grocery and clothing" | All 3 + synthesizer | category_performance × 2 + trends + search |
+| "What is the retail market outlook?" | All 3 + synthesizer | category_share + yoy + Google Search |
+| "Which region is strongest for electronics?" | All 3 + synthesizer | regional_performance + trends + search |
 
 ## Project Structure
 
 ```
-ml-platform-gcp/
-├── README.md
-├── LICENSE
-├── .gitignore
+adk-research-agent/
+├── research_agent/
+│   ├── __init__.py                  # Exports root agent
+│   ├── agent.py                     # SequentialAgent + ParallelAgent + 4 LlmAgents
+│   ├── research_eval.evalset.json   # 10-case eval set
+│   └── tools/
+│       ├── __init__.py              # Tool exports
+│       ├── internal_tools.py        # 3 BigQuery tools (current metrics)
+│       └── trend_tools.py           # 3 BigQuery tools (historical trends)
+├── scripts/
+│   └── generate_data.py             # Synthetic data generator (456K rows)
 ├── docs/
-│   ├── Technical_Deep_Dive.docx          # 60+ page comprehensive guide
-│   ├── LinkedIn_Post.docx                # LinkedIn publication version
-│   ├── Medium_Post.docx                  # Medium article version
-│   ├── architecture/
-│   │   ├── architecture-diagram.drawio   # Editable architecture diagram
-│   │   └── architecture-diagram.png      # Architecture diagram image
-│   └── screenshots/
-│       └── ...                           # Dashboard & implementation screenshots
-├── sql/
-│   ├── 01_create_tables.sql
-│   ├── 02_data_ingestion.sql
-│   ├── 03_data_unification.sql
-│   ├── 04_feature_engineering.sql
-│   ├── 05_model_training.sql
-│   ├── 06_predictions.sql
-│   ├── 07_evaluation.sql
-│   ├── 08_monitoring.sql
-│   ├── 09_cost_optimization.sql
-│   └── 10_data_lineage.sql
-└── data/
-    ├── retail_electronics_sales.csv
-    ├── retail_apparel_sales.csv
-    └── retail_home_garden_sales.csv
+│   ├── ARCHITECTURE.md              # Architecture Decision Records
+│   ├── QA_GUIDE.md                  # 12-part in-depth Q&A
+│   ├── architecture_diagram.svg     # Full architecture visualization
+│   └── screenshots/                 # 8 annotated screenshots
+├── requirements.txt
+└── README.md
 ```
-
----
 
 ## Quick Start
 
-### Prerequisites
+```bash
+# 1. Clone
+git clone https://github.com/gbhorne/adk-research-agent.git
+cd adk-research-agent
 
-- Google Cloud Platform account ([free tier works](https://cloud.google.com/free))
-- Basic SQL knowledge
-- 2–3 hours
+# 2. Install dependencies
+pip install -r requirements.txt
 
-### Setup
+# 3. Set environment variables
+export GOOGLE_API_KEY="your-api-key"
+export GOOGLE_CLOUD_PROJECT="your-project-id"
 
-1. **Clone this repository**
-   ```bash
-   git clone https://github.com/gbhorne/ml-platform-gcp.git
-   cd ml-platform-gcp
-   ```
+# 4. Create BigQuery dataset
+bq mk --dataset --location=US $GOOGLE_CLOUD_PROJECT:retail_gold
 
-2. **Create a GCP project** and enable the BigQuery API
+# 5. Generate and load synthetic data
+python scripts/generate_data.py
 
-3. **Upload data to Cloud Storage**
-   ```bash
-   gsutil cp data/*.csv gs://your-bucket/raw/
-   ```
-
-4. **Run SQL scripts sequentially** in BigQuery Console
-   ```
-   sql/01_create_tables.sql → sql/02_data_ingestion.sql → ... → sql/10_data_lineage.sql
-   ```
-
-5. **Connect Looker Studio** to your BigQuery dataset
-
-**Estimated cost:** Under $5 for initial experimentation, under $2/month for production.
-
----
-
-## Dataset
-
-Three years of daily retail sales data (January 2022 – December 2024):
-
-| Category | Records | Seasonality Pattern |
-|---|---|---|
-| Electronics | 1,095 | Strong Q4 holiday peak (+45%) |
-| Apparel | 1,095 | Fashion seasons, Spring/Fall emphasis (+28%) |
-| Home & Garden | 1,095 | Spring/Summer concentration (+12%) |
-| **Total** | **3,285** | |
-
-### Features Engineered (15+)
-
-- **Temporal:** day_of_week, month, quarter, day_of_year
-- **Moving Averages:** 7-day, 30-day windows
-- **Lag Features:** 1-day, 7-day, 30-day, 365-day
-- **Seasonality:** Holiday flags, season indicators
-- **Statistical:** Rolling std dev, min, max
-
----
-
-## Model Details
-
-### ARIMA Plus Configuration
-
-```sql
-CREATE OR REPLACE MODEL `project.dataset.electronics_forecast_model`
-OPTIONS(
-  model_type='ARIMA_PLUS',
-  time_series_timestamp_col='date',
-  time_series_data_col='sales_quantity',
-  auto_arima=TRUE,
-  auto_arima_max_order=5,
-  data_frequency='DAILY',
-  decompose_time_series=TRUE,
-  holiday_region='US',
-  horizon=90
-) AS
-SELECT date, product_category, sales_quantity
-FROM training_data
-WHERE product_category = 'Electronics';
+# 6. Launch agent
+export PATH="$HOME/.local/bin:$PATH"
+adk web .
 ```
 
-### Training Results
+## Architecture Decisions
 
-All three models auto-selected **ARIMA(0,1,2)** with weekly and yearly seasonality detected.
+| ADR | Decision | Reason |
+|-----|----------|--------|
+| ADR-1 | ADK over LangGraph/CrewAI | Native GCP integration, Gemini-optimized |
+| ADR-2 | SequentialAgent root | LlmAgent root couldn't synthesize parallel results |
+| ADR-3 | ParallelAgent for research | Breadth over routing — 3 perspectives simultaneously |
+| ADR-4 | Google Search grounding | Zero config, automatic citations |
+| ADR-5 | Fixed SQL over text-to-SQL | Reliability, security, cost control |
+| ADR-6 | Separated internal vs trend analysts | True parallel execution of BigQuery tools |
+| ADR-7 | output_key for state passing | Structured access for synthesizer |
+| ADR-8 | Synthetic data with patterns | Ground truth for validation |
 
-| Model | AIC | Variance | Training Time |
-|---|---|---|---|
-| Electronics | 9,221 | 6,900 | ~12 min |
-| Apparel | 9,486 | 8,213 | ~14 min |
-| Home & Garden | 9,340 | 9,803 | ~11 min |
+Full details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
----
+## Testing
 
-## Business Impact
+**All agent structure, imports, BigQuery data, and tool tests passing.**
 
-| Metric | Value |
-|---|---|
-| Inventory Cost Savings | $250K/year (10% improvement) |
-| Analyst Hours Freed | 1,040 hours/year |
-| Forecast Confidence | 95% CI on all predictions |
-| Platform ROI | 12,500x |
+## Portfolio Context
 
----
-
-## Lessons Learned
-
-1. **Data Quality > Algorithm Choice** — Improving from 92% to 99.7% reduced error by 15%
-2. **Start Simple** — ARIMA Plus achieved 95% confidence without deep learning
-3. **Serverless First** — BigQuery ML eliminated 90% of operational overhead
-4. **Monitor from Day 1** — Prevents cost overruns and catches drift early
-5. **Document Everything** — 10% time investment, 100x payback
-
----
-
-## Future Roadmap
-
-- [ ] Real-time prediction API (Cloud Functions)
-- [ ] Model comparison dashboard (ARIMA vs Prophet)
-- [ ] Automated retraining pipeline
-- [ ] External data integration (weather, Google Trends)
-- [ ] Geographic segmentation (regional forecasts)
-- [ ] Deep learning experiments (LSTM, Temporal Fusion Transformer)
-
----
-
-## Documentation
-
-| Document | Description |
-|---|---|
-| [Technical Deep Dive](docs/Technical_Deep_Dive.docx) | 60+ page comprehensive implementation guide |
-| [LinkedIn Post](docs/LinkedIn_Post.docx) | Publication-ready LinkedIn article |
-| [Medium Article](docs/Medium_Post.docx) | Full Medium blog post |
-
----
+| # | Project | Pattern | Key Technology |
+|---|---------|---------|---------------|
+| 1 | Enterprise Analytics | Star schema data platform | BigQuery, dbt, Cloud Composer |
+| 2 | Terraform IaC | 49-resource infrastructure | Terraform, GCS, IAM |
+| 3 | [ADK Retail Agents](https://github.com/gbhorne/adk-retail-agents) | Orchestrator → specialist routing | ADK, transfer_to_agent |
+| 4 | [ADK NL2SQL Agent](https://github.com/gbhorne/adk-nl2sql-agent) | Dynamic SQL generation | ADK, text-to-SQL |
+| 5 | [ADK Anomaly Detection](https://github.com/gbhorne/adk-anomaly-detection-agent) | BigQuery ML integration | ADK, ARIMA_PLUS |
+| 6 | **ADK Research Agent** | **Parallel execution + synthesis** | **ADK, ParallelAgent, Google Search** |
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-## Author
-
-**gbhorne** — [GitHub](https://github.com/gbhorne)
-
----
-
-> *All metrics, costs, and results are based on actual production implementation on Google Cloud Platform, February 2026.*
+MIT
