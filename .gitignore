@@ -1,0 +1,6 @@
+﻿__pycache__/
+*.pyc
+.adk/
+*.db
+.env
+*.tar.gz

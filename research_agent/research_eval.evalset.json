@@ -1,0 +1,82 @@
+[
+  {
+    "name": "electronics_performance",
+    "data": {
+      "input": "How are electronics performing?",
+      "expected_tool_use": ["get_category_performance"],
+      "expected_output": "revenue"
+    }
+  },
+  {
+    "name": "category_comparison",
+    "data": {
+      "input": "Compare grocery and clothing performance",
+      "expected_tool_use": ["get_category_performance"],
+      "expected_output": "growth"
+    }
+  },
+  {
+    "name": "market_outlook",
+    "data": {
+      "input": "What is the retail market outlook for next year?",
+      "expected_tool_use": [],
+      "expected_output": "forecast"
+    }
+  },
+  {
+    "name": "regional_breakdown",
+    "data": {
+      "input": "Which region is strongest for electronics?",
+      "expected_tool_use": ["get_regional_performance"],
+      "expected_output": "region"
+    }
+  },
+  {
+    "name": "trend_analysis",
+    "data": {
+      "input": "Show me the monthly trend for clothing over the past year",
+      "expected_tool_use": ["get_monthly_trend"],
+      "expected_output": "monthly"
+    }
+  },
+  {
+    "name": "yoy_growth",
+    "data": {
+      "input": "What is the year-over-year growth for sports?",
+      "expected_tool_use": ["get_yoy_comparison"],
+      "expected_output": "yoy"
+    }
+  },
+  {
+    "name": "category_share",
+    "data": {
+      "input": "What percentage of revenue comes from each category?",
+      "expected_tool_use": ["get_category_share"],
+      "expected_output": "percentage"
+    }
+  },
+  {
+    "name": "top_products",
+    "data": {
+      "input": "What are our top 5 electronics products?",
+      "expected_tool_use": ["get_top_products"],
+      "expected_output": "product"
+    }
+  },
+  {
+    "name": "strategic_recommendation",
+    "data": {
+      "input": "Where should we focus investment to grow revenue?",
+      "expected_tool_use": ["get_category_share", "get_yoy_comparison"],
+      "expected_output": "recommend"
+    }
+  },
+  {
+    "name": "external_context",
+    "data": {
+      "input": "What external factors are affecting the home and garden market?",
+      "expected_tool_use": [],
+      "expected_output": "market"
+    }
+  }
+]

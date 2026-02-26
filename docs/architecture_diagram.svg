@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" font-family="Arial, sans-serif">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+    <linearGradient id="seqGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="parGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f3460"/>
+      <stop offset="100%" stop-color="#1a1a4e"/>
+    </linearGradient>
+    <linearGradient id="intGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e94560"/>
+      <stop offset="100%" stop-color="#c23152"/>
+    </linearGradient>
+    <linearGradient id="mktGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4CAF50"/>
+      <stop offset="100%" stop-color="#388E3C"/>
+    </linearGradient>
+    <linearGradient id="trdGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF9800"/>
+      <stop offset="100%" stop-color="#F57C00"/>
+    </linearGradient>
+    <linearGradient id="synGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9C27B0"/>
+      <stop offset="100%" stop-color="#7B1FA2"/>
+    </linearGradient>
+    <linearGradient id="toolGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#455A64"/>
+      <stop offset="100%" stop-color="#37474F"/>
+    </linearGradient>
+    <linearGradient id="userGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2196F3"/>
+      <stop offset="100%" stop-color="#1976D2"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="720" fill="#f5f5f5" rx="8"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a1a2e">ADK Research Agent — Architecture</text>
+  <text x="450" y="55" text-anchor="middle" font-size="12" fill="#666">SequentialAgent → ParallelAgent → Synthesizer | Google ADK 1.25.1 + Gemini 2.5 Flash</text>
+
+  <!-- User Query -->
+  <rect x="350" y="70" width="200" height="40" rx="20" fill="url(#userGrad)" filter="url(#shadow)"/>
+  <text x="450" y="95" text-anchor="middle" font-size="13" font-weight="bold" fill="white">User Query</text>
+
+  <!-- Arrow: User → Sequential -->
+  <line x1="450" y1="110" x2="450" y2="130" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#333"/></marker></defs>
+
+  <!-- SequentialAgent Container -->
+  <rect x="40" y="135" width="820" height="530" rx="12" fill="none" stroke="#1a1a2e" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <rect x="40" y="135" width="820" height="32" rx="12" fill="url(#seqGrad)"/>
+  <rect x="40" y="155" width="820" height="12" fill="url(#seqGrad)"/>
+  <text x="450" y="156" text-anchor="middle" font-size="14" font-weight="bold" fill="white">research_pipeline (SequentialAgent — Root Agent)</text>
+
+  <!-- Step 1 Label -->
+  <rect x="60" y="178" width="70" height="22" rx="11" fill="#0f3460"/>
+  <text x="95" y="193" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Step 1</text>
+
+  <!-- ParallelAgent Container -->
+  <rect x="60" y="205" width="780" height="295" rx="10" fill="none" stroke="#0f3460" stroke-width="2" stroke-dasharray="6,3"/>
+  <rect x="60" y="205" width="780" height="28" rx="10" fill="url(#parGrad)"/>
+  <rect x="60" y="223" width="780" height="10" fill="url(#parGrad)"/>
+  <text x="450" y="224" text-anchor="middle" font-size="13" font-weight="bold" fill="white">research_team (ParallelAgent — Concurrent Execution)</text>
+
+  <!-- Parallel arrows from ParallelAgent header -->
+  <line x1="210" y1="233" x2="210" y2="260" stroke="#0f3460" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="450" y1="233" x2="450" y2="260" stroke="#0f3460" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <line x1="690" y1="233" x2="690" y2="260" stroke="#0f3460" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Concurrent indicators -->
+  <text x="330" y="252" text-anchor="middle" font-size="10" fill="#0f3460" font-style="italic">concurrent</text>
+  <text x="570" y="252" text-anchor="middle" font-size="10" fill="#0f3460" font-style="italic">concurrent</text>
+
+  <!-- Internal Data Analyst -->
+  <rect x="80" y="265" width="250" height="50" rx="8" fill="url(#intGrad)" filter="url(#shadow)"/>
+  <text x="205" y="286" text-anchor="middle" font-size="12" font-weight="bold" fill="white">internal_data_analyst</text>
+  <text x="205" y="302" text-anchor="middle" font-size="10" fill="#ffcdd2">LlmAgent + 3 BigQuery Tools</text>
+
+  <!-- Market Research Analyst -->
+  <rect x="340" y="265" width="220" height="50" rx="8" fill="url(#mktGrad)" filter="url(#shadow)"/>
+  <text x="450" y="286" text-anchor="middle" font-size="12" font-weight="bold" fill="white">market_research_analyst</text>
+  <text x="450" y="302" text-anchor="middle" font-size="10" fill="#C8E6C9">LlmAgent + Google Search</text>
+
+  <!-- Trend Analyst -->
+  <rect x="570" y="265" width="250" height="50" rx="8" fill="url(#trdGrad)" filter="url(#shadow)"/>
+  <text x="695" y="286" text-anchor="middle" font-size="12" font-weight="bold" fill="white">trend_analyst</text>
+  <text x="695" y="302" text-anchor="middle" font-size="10" fill="#FFF3E0">LlmAgent + 3 BigQuery Tools</text>
+
+  <!-- Arrows to tools -->
+  <line x1="205" y1="315" x2="205" y2="345" stroke="#c23152" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="450" y1="315" x2="450" y2="345" stroke="#388E3C" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="695" y1="315" x2="695" y2="345" stroke="#F57C00" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Internal Tools -->
+  <rect x="80" y="350" width="250" height="70" rx="6" fill="url(#toolGrad)" filter="url(#shadow)"/>
+  <text x="205" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="white">BigQuery Tools</text>
+  <text x="205" y="386" text-anchor="middle" font-size="9" fill="#B0BEC5">get_category_performance()</text>
+  <text x="205" y="399" text-anchor="middle" font-size="9" fill="#B0BEC5">get_regional_performance()</text>
+  <text x="205" y="412" text-anchor="middle" font-size="9" fill="#B0BEC5">get_top_products()</text>
+
+  <!-- Market Tools -->
+  <rect x="340" y="350" width="220" height="55" rx="6" fill="url(#toolGrad)" filter="url(#shadow)"/>
+  <text x="450" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Google Search Grounding</text>
+  <text x="450" y="386" text-anchor="middle" font-size="9" fill="#B0BEC5">Gemini built-in web search</text>
+  <text x="450" y="399" text-anchor="middle" font-size="9" fill="#B0BEC5">Auto-generated queries + citations</text>
+
+  <!-- Trend Tools -->
+  <rect x="570" y="350" width="250" height="70" rx="6" fill="url(#toolGrad)" filter="url(#shadow)"/>
+  <text x="695" y="370" text-anchor="middle" font-size="11" font-weight="bold" fill="white">BigQuery Tools</text>
+  <text x="695" y="386" text-anchor="middle" font-size="9" fill="#B0BEC5">get_monthly_trend()</text>
+  <text x="695" y="399" text-anchor="middle" font-size="9" fill="#B0BEC5">get_yoy_comparison()</text>
+  <text x="695" y="412" text-anchor="middle" font-size="9" fill="#B0BEC5">get_category_share()</text>
+
+  <!-- Data sources -->
+  <line x1="205" y1="420" x2="205" y2="450" stroke="#455A64" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="450" y1="405" x2="450" y2="450" stroke="#455A64" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="695" y1="420" x2="695" y2="450" stroke="#455A64" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Data source boxes -->
+  <rect x="130" y="455" width="150" height="30" rx="6" fill="#E3F2FD" stroke="#1976D2" stroke-width="1"/>
+  <text x="205" y="475" text-anchor="middle" font-size="10" font-weight="bold" fill="#1565C0">BigQuery retail_gold</text>
+
+  <rect x="375" y="455" width="150" height="30" rx="6" fill="#E8F5E9" stroke="#388E3C" stroke-width="1"/>
+  <text x="450" y="475" text-anchor="middle" font-size="10" font-weight="bold" fill="#2E7D32">Google Web Search</text>
+
+  <rect x="620" y="455" width="150" height="30" rx="6" fill="#FFF3E0" stroke="#F57C00" stroke-width="1"/>
+  <text x="695" y="475" text-anchor="middle" font-size="10" font-weight="bold" fill="#E65100">BigQuery retail_gold</text>
+
+  <!-- output_key labels -->
+  <text x="205" y="500" text-anchor="middle" font-size="9" fill="#666" font-style="italic">output_key: "internal_data"</text>
+  <text x="450" y="500" text-anchor="middle" font-size="9" fill="#666" font-style="italic">output_key: "market_research"</text>
+  <text x="695" y="500" text-anchor="middle" font-size="9" fill="#666" font-style="italic">output_key: "trend_analysis"</text>
+
+  <!-- Step 2 Label -->
+  <rect x="60" y="520" width="70" height="22" rx="11" fill="#9C27B0"/>
+  <text x="95" y="535" text-anchor="middle" font-size="11" font-weight="bold" fill="white">Step 2</text>
+
+  <!-- Arrow: Parallel → Synthesizer -->
+  <line x1="450" y1="510" x2="450" y2="550" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="470" y="535" font-size="9" fill="#666" font-style="italic">state passed</text>
+
+  <!-- Synthesizer -->
+  <rect x="200" y="555" width="500" height="50" rx="8" fill="url(#synGrad)" filter="url(#shadow)"/>
+  <text x="450" y="576" text-anchor="middle" font-size="14" font-weight="bold" fill="white">synthesizer</text>
+  <text x="450" y="594" text-anchor="middle" font-size="10" fill="#E1BEE7">LlmAgent — Reads state, produces unified research brief</text>
+
+  <!-- Arrow: Synthesizer → Output -->
+  <line x1="450" y1="605" x2="450" y2="635" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Output -->
+  <rect x="275" y="640" width="350" height="40" rx="20" fill="url(#userGrad)" filter="url(#shadow)"/>
+  <text x="450" y="665" text-anchor="middle" font-size="13" font-weight="bold" fill="white">Unified Research Brief</text>
+
+  <!-- Legend -->
+  <rect x="60" y="690" width="12" height="12" rx="2" fill="#e94560"/>
+  <text x="78" y="701" font-size="9" fill="#333">Internal Data</text>
+  <rect x="160" y="690" width="12" height="12" rx="2" fill="#4CAF50"/>
+  <text x="178" y="701" font-size="9" fill="#333">Market Research</text>
+  <rect x="280" y="690" width="12" height="12" rx="2" fill="#FF9800"/>
+  <text x="298" y="701" font-size="9" fill="#333">Trend Analysis</text>
+  <rect x="395" y="690" width="12" height="12" rx="2" fill="#9C27B0"/>
+  <text x="413" y="701" font-size="9" fill="#333">Synthesizer</text>
+  <rect x="490" y="690" width="12" height="12" rx="2" fill="#455A64"/>
+  <text x="508" y="701" font-size="9" fill="#333">Tools/Data</text>
+  <rect x="580" y="690" width="12" height="12" rx="2" fill="#2196F3"/>
+  <text x="598" y="701" font-size="9" fill="#333">User I/O</text>
+  <text x="700" y="701" font-size="9" fill="#999">ADK 1.25.1 | Gemini 2.5 Flash | BigQuery | Cost: $0</text>
+</svg>
